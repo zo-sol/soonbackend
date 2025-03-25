@@ -9,10 +9,10 @@ const app = express();
 app.use(express.json());
 setupRoutes(app);
 
-const port = configs.port || process.env.PORT || 8080;
+const port = configs.port || process.env.MYPORT || 8080;
 console.log('Starting server...');
 console.log('Environment:', {
-    PORT: process.env.PORT,
+    PORT: process.env.MYPORT,
     configPort: configs.port
 });
 

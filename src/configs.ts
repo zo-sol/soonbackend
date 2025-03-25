@@ -4,7 +4,7 @@ export const configs = {
     network: process.env.NETWORK_URL || '',
     dbSeed: process.env.DB_SEED || '',
     dataSeed: process.env.DATA_SEED || '',
-    port: process.env.PORT || 8080,
+    port: process.env.MYPORT || 8080,
     mongoUri: process.env.MONGO_URL || '',
 }
 
