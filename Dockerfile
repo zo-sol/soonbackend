@@ -21,4 +21,5 @@ COPY . .
 
 RUN npm run build
 EXPOSE 8080
-CMD node dist/app.js
+CMD exec node dist/app.js
+
