@@ -23,11 +23,12 @@ steps:
       - '--port'
       - '8080'
       - '--allow-unauthenticated'
+      # 환경변수는 Cloud Build 트리거에서 설정
       - '--set-env-vars'
-      - 'MYPORT=8080'
+      - '${_ENV_VARS}'  # Cloud Build 트리거에서 정의
 
 images:
   - 'gcr.io/$PROJECT_ID/iq6900-backend'
 
 options:
-  logging: CLOUD_LOGGING_ONLY  # Cloud Logging만 사용
+  logging: CLOUD_LOGGING_ONLY
