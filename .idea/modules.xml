@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/iq6900_testbackend.iml" filepath="$PROJECT_DIR$/.idea/iq6900_testbackend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/iq-soonbackend.iml" filepath="$PROJECT_DIR$/.idea/iq-soonbackend.iml" />
     </modules>
   </component>
 </project>
