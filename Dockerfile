@@ -20,11 +20,24 @@ COPY package*.json ./
 # node-gyp가 python3를 찾을 수 있도록 환경변수 설정
 ENV PYTHON=/usr/bin/python3
 
+# 프로덕션 환경 설정
+ENV NODE_ENV=production
+ENV PORT=8080
+
 # 의존성 설치
 RUN npm install
 
+# 소스 코드 복사
+COPY . .
+
 # TypeScript 빌드
 RUN npm run build
+
+# 불필요한 devDependencies 제거
+RUN npm prune --production
+
+# 포트 설정
+EXPOSE 8080
 
 # 애플리케이션 실행
 CMD ["node", "dist/app.js"]
