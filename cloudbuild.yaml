@@ -13,7 +13,7 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'iq6900-backend'
+      - 'iq-testbackend'
       - '--image'
       - 'gcr.io/$PROJECT_ID/iq6900-backend'
       - '--region'
@@ -28,7 +28,7 @@ steps:
       - '${_ENV_VARS}'  # Cloud Build 트리거에서 정의
 
 images:
-  - 'gcr.io/$PROJECT_ID/iq6900-backend'
+  - 'gcr.io/$PROJECT_ID/iq-testbackend'
 
 options:
   logging: CLOUD_LOGGING_ONLY
