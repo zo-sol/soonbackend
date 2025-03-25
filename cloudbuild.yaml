@@ -17,14 +17,17 @@ steps:
       - '--image'
       - 'gcr.io/$PROJECT_ID/iq6900-backend'
       - '--region'
-      - 'asia-northeast3'  # 서울 리전
+      - 'asia-northeast3'
       - '--platform'
       - 'managed'
       - '--port'
       - '8080'
-      - '--allow-unauthenticated'  # 공개 접근 허용
+      - '--allow-unauthenticated'
       - '--set-env-vars'
       - 'MYPORT=8080'
 
 images:
   - 'gcr.io/$PROJECT_ID/iq6900-backend'
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Cloud Logging만 사용
