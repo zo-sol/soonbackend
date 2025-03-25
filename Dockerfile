@@ -22,5 +22,7 @@ RUN npm install -g ts-node
 
 COPY . .
 
+COPY .env* ./
+
 RUN npm run build
 RUN npm run start
