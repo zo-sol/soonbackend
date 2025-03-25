@@ -9,6 +9,13 @@ const app = express();
 app.use(express.json());
 setupRoutes(app);
 
-app.listen(configs.port, () => {
-    console.log(`API server running on port ${process.env.PORT}`);
+const port = configs.port || process.env.PORT || 8080;
+console.log('Starting server...');
+console.log('Environment:', {
+    PORT: process.env.PORT,
+    configPort: configs.port
+});
+
+app.listen(port, () => {
+    console.log(`API server running on port ${port}`);
 });

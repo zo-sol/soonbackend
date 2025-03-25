@@ -14,16 +14,20 @@ RUN apk add --no-cache \
 COPY package*.json ./
 
 ENV PYTHON=/usr/bin/python3
+ENV PORT=8080
 
 RUN npm install --include=dev
 
 COPY . .
 
 RUN npm run build
+
 EXPOSE 8080
+
 # start.sh 스크립트 생성
 RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'cd /app && npm run start' >> /start.sh && \
+    echo 'cd /app' >> /start.sh && \
+    echo 'exec node dist/app.js' >> /start.sh && \
     chmod +x /start.sh
 
 # 스크립트를 ENTRYPOINT로 실행
