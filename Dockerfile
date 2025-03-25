@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # 작업 디렉토리 설정
-WORKDIR /src/app
+WORKDIR /usr/src/app
 
 # canvas 패키지를 위한 빌드 의존성 설치
 RUN apk add --no-cache \
