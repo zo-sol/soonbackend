@@ -14,8 +14,7 @@ RUN apk add --no-cache \
 COPY . .
 
 ENV PYTHON=/usr/bin/python3
-ENV PORT=8080
-
+ENV MYPORT=8080
 RUN npm install
 RUN npm run build
 
