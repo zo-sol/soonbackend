@@ -17,13 +17,8 @@ ENV PYTHON=/usr/bin/python3
 
 RUN npm install --include=dev
 
-RUN npm install -g ts-node
-
-
 COPY . .
-
 
 RUN npm run build
 
-CMD ["sh", "-c", "node -r dotenv/config dist/app.js"]
-RUN npm run start
+CMD ["npm", "run", "start"]
