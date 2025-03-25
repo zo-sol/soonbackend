@@ -165,7 +165,7 @@ export const getTransactionInfoFromCacheDb = async (transactionId: string, merkl
             if (type !== '') {
                 const resultReverse = result.reverse();
                 let chunks: string[] = [];
-                if (type == "image") {
+                if (type == "image" || type == "test_image") {
                     chunks = getDecodedChunks(resultReverse, blockTime);
                 }
                 //else if (type == "text" || type == "json" ||type == "love_letter") {

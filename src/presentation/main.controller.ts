@@ -168,7 +168,7 @@ export const getTransactionResult = async (req: Request, res: Response): Promise
         if (blockTime !== 0) {
             const resultReverse = result.reverse();
             let response = "";
-            if (type == "image") {
+            if (type == "image" || type == "test_image") {
                 response = decodeByChunks(resultReverse);
             } else {
                 let resultText: string = "";
