@@ -22,7 +22,8 @@ RUN npm install -g ts-node
 
 COPY . .
 
-COPY .env* ./
 
 RUN npm run build
+
+CMD ["sh", "-c", "node -r dotenv/config dist/app.js"]
 RUN npm run start
