@@ -10,7 +10,9 @@ RUN apk add --no-cache \
     make \
     g++ \
     cairo-dev \
-    build-base
+    pango-dev \
+    build-base \
+    pkgconfig
 
 # package.json과 package-lock.json 복사
 COPY package*.json ./
