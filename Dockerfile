@@ -21,5 +21,10 @@ COPY . .
 
 RUN npm run build
 EXPOSE 8080
-CMD exec node dist/app.js
+# start.sh 스크립트 생성
+RUN echo '#!/bin/sh' > /start.sh && \
+    echo 'cd /app && npm run start' >> /start.sh && \
+    chmod +x /start.sh
 
+# 스크립트를 ENTRYPOINT로 실행
+ENTRYPOINT ["/start.sh"]
