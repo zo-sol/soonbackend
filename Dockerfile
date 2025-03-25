@@ -39,4 +39,5 @@ RUN npm prune --production
 # 포트 설정
 EXPOSE 8080
 
-# 애플리케이
+# 애플리케이션 실행
+CMD ["node", "dist/app.js"]
