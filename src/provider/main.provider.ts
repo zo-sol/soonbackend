@@ -9,7 +9,7 @@ export const initializeUserAccounts = async (userKeyString: string) => {
     const userKey: any = new PublicKey(userKeyString);
     const PDA = await getPDA(userKey);
     const DBPDA = await getDBPDA(userKey);
-  
+
     // userKey를 PublicKey 객체로 변환
     try {
         const program = new Program(idl as Idl, userKey);
@@ -25,7 +25,7 @@ export const initializeUserAccounts = async (userKeyString: string) => {
             })
             .instruction();
         tx.add(make_pda);
-    
+
         return tx;
     } catch (error) {
         console.error(error);

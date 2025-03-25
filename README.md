@@ -12,8 +12,9 @@
 This guide provides instructions for setting up and running the project.
 
 ```bash
-$ git clone https://github.com/IQ6900/iq6900_backend
-$ cd iq6900_backend
+$ git clone https://github.com/IQ6900/soonbackend
+
+$ cd iq-soonbackend
 $ npm install
 
 ```

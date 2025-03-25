@@ -1,11 +1,11 @@
 steps:
   # Docker 이미지 빌드
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/iq-testbackend', '.']  # 여기 수정
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/iq-soonbackend', '.']  # 여기 수정
 
   # 이미지를 Container Registry에 푸시
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/iq-testbackend']  # 여기 수정
+    args: ['push', 'gcr.io/$PROJECT_ID/iq-soonbackend']  # 여기 수정
 
   # Cloud Run에 배포
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -13,9 +13,9 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'iq-testbackend'
+      - 'iq-soonbackend'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/iq-testbackend'  # 여기 수정
+      - 'gcr.io/$PROJECT_ID/iq-soonbackend'  # 여기 수정
       - '--region'
       - 'asia-northeast3'
       - '--platform'
@@ -27,7 +27,7 @@ steps:
       - '${_ENV_VARS}'
 
 images:
-  - 'gcr.io/$PROJECT_ID/iq-testbackend'
+  - 'gcr.io/$PROJECT_ID/iq-soonbackend'
 
 options:
   logging: CLOUD_LOGGING_ONLY
