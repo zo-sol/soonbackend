@@ -14,30 +14,21 @@ RUN apk add --no-cache \
     build-base \
     pkgconfig
 
-# package.json과 package-lock.json 복사
 COPY package*.json ./
 
-# node-gyp가 python3를 찾을 수 있도록 환경변수 설정
 ENV PYTHON=/usr/bin/python3
-
-# 환경 변수 설정
-ENV PORT=8080
-ENV NODE_ENV=production
 
 # 모든 의존성 설치 (개발 의존성 포함)
 RUN npm install --include=dev
 
-# 소스 코드 복사
+# ts-node 설치
+RUN npm install -g ts-node
+
+# 소스 코드와 환경 변수 파일 복사
 COPY . .
-
-# TypeScript 빌드
-RUN npx tsc
-
-# 개발 의존성 제거
-RUN npm prune --production
 
 # 포트 설정
 EXPOSE 8080
 
-# 애플리케이션 실행
-CMD ["node", "dist/app.js"]
+# TypeScript 파일 직접 실행
+CMD ["ts-node", "src/app.ts"]
