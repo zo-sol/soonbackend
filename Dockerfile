@@ -26,11 +26,14 @@ ENV PORT=8080
 # 모든 의존성 설치 (개발 의존성 포함)
 RUN npm install --include=dev
 
+# TypeScript 전역 설치
+RUN npm install -g typescript
+
 # 소스 코드 복사
 COPY . .
 
 # TypeScript 빌드
-RUN npm run build
+RUN tsc
 
 # 개발 의존성 제거 및 프로덕션 모드 설정
 ENV NODE_ENV=production
