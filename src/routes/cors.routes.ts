@@ -1,15 +1,14 @@
 import { Router } from 'express';
 import cors from 'cors';
 
-// const allowedOrigins = [
-//     "https://iq6900.com",
-//     "https://elizacodein.com",
-//     "https://eliza-codein.pages.dev",
-//     "https://testbrowserforiq.web.app"
-// ];
 const allowedOrigins = [
-    "*" // allow all for testing
+"https://iq6900.com",
+"https://elizacodein.com",
+"https://eliza-codein.pages.dev",
+"https://testbrowserforiq.web.app",
+"http://127.0.0.1:3000"
 ];
+
 export default (router: Router): void => {
     const r = Router();
     r.use(
