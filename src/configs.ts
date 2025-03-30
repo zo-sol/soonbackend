@@ -10,5 +10,8 @@ export const configs = {
 
 export const constants = {
     expectedReceiver: new PublicKey("4w2UTBBaBfC16fuqk7nCr58FTx8mwqK3cimeT5uvy9Xh"),
-    programId: new PublicKey("EY4HPYAFb2UbJxDBPvkbzp6YErMdWXN32RXKj2z8iCUe")
+    //programId: new PublicKey("EY4HPYAFb2UbJxDBPvkbzp6YErMdWXN32RXKj2z8iCUe")
+    programId: new PublicKey("HyPbmCVDcEu1vNHzPCghb9skQEbam2LBQEk9BFZQphHQ")
+
+
 }
