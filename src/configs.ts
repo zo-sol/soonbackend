@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 
 export const configs = {
-    network: process.env.NETWORK_URL || '',
+    network: "https://rpc.testnet.soo.network/rpc",
     dbSeed: process.env.DB_SEED || '',
     dataSeed: process.env.DATA_SEED || '',
     port: process.env.MYPORT || 8080,
