@@ -13,7 +13,7 @@ export const constants = {
     // programId: new PublicKey("EY4HPYAFb2UbJxDBPvkbzp6YErMdWXN32RXKj2z8iCUe") //testnet
    // programId: new PublicKey("HyPbmCVDcEu1vNHzPCghb9skQEbam2LBQEk9BFZQphHQ")//mainnet
 
-    programId: "FTnvQFnhZNPKHmm9vEhxz25HS3FR8NiWv56zm7t8VUgx"
+    programId: new PublicKey("FTnvQFnhZNPKHmm9vEhxz25HS3FR8NiWv56zm7t8VUgx")
 
 
 
