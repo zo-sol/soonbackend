@@ -12,6 +12,7 @@ async function bringInfo(dataTxid: string) {
     let type_field = "";
     let blockTime = 0;
     const txInfo = await readTransaction(dataTxid);
+    console.log("txinfo in bringinfo",txInfo)
     if (txInfo) {
         offset = txInfo.offset;
         type_field = txInfo.type_field;
@@ -38,6 +39,7 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
         if (signatures.length === 0) break; // 더 이상 가져올 데이터 없음
         for (let i = 0; i < signatures.length; i++) {
             const info = await bringInfo(signatures[i].signature);
+            console.log(info);
             if (info) {
 
                 if (info.blockTime <= db_max_block_time) {
