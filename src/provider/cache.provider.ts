@@ -80,6 +80,7 @@ export const updateTxListToDb = async (
         const new_sig = await fetchSignaturesForCache(_targetAddress, category);
 
         for (const sig of new_sig) {
+            console.log(sig.txId)
             await collection.updateOne(
                 {_id: sig.txId}, // 검색 조건
                 {$set: {merkle_root: sig.merkleRoot, block_time: sig.blockTime}},
