@@ -79,6 +79,7 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
         }
         before = signatures[signatures.length - 1].signature;
     }
+    console.log(allSignatures);
     return allSignatures;
 }
 
