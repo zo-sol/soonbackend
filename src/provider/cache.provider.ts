@@ -78,6 +78,7 @@ export const updateTxListToDb = async (
         const collection = database.collection<TxDocument>(`${targetAddress}/${category}`);
         const _targetAddress = new PublicKey(targetAddress);
         const new_sig = await fetchSignaturesForCache(_targetAddress, category);
+        console.log(new_sig)
 
         for (const sig of new_sig) {
             console.log(sig.txId)

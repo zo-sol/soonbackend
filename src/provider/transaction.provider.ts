@@ -17,7 +17,6 @@ async function bringInfo(dataTxid: string) {
         offset = txInfo.offset;
         type_field = txInfo.type_field;
         blockTime = txInfo.blockTime;
-        console.log("txinfo in bringinfo",type_field,offset,blockTime)
         return {type_field, offset, blockTime};
     } else {
         return null
