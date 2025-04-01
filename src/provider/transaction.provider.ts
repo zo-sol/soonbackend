@@ -48,7 +48,7 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
                 }
 
                 if (typeString === "SolanaInternet") {
-                    if (info.type_field === "image" || info.type_field === "text") {
+                    if (info.type_field === "image" || info.type_field === "test_image" ||info.type_field === "text") {
                         if (!allSignatures.includes({
                             txId: signatures[i].signature,
                             merkleRoot: info.offset,
@@ -81,7 +81,7 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
         }
         before = signatures[signatures.length - 1].signature;
     }
-    console.log(allSignatures);
+
     return allSignatures;
 }
 
