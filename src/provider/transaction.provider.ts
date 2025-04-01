@@ -35,7 +35,7 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
         if (signatures.length === 0) break; // 더 이상 가져올 데이터 없음
         for (let i = 0; i < signatures.length; i++) {
             const info = await bringInfo(signatures[i].signature);
-            if (info) {
+            if (info.offset) {
                 if (info.blockTime <= db_max_block_time) {
                     console.log(`🛑 Encountered blockTime (${info.blockTime}) <= latestBlockTime (${db_max_block_time}). Stopping.`);
                     return allSignatures; // ✅ 중단하고 결과 리턴
