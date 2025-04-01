@@ -36,9 +36,9 @@ export const getTxListFromDb = async (
     const pageSize = 100;
     let filter: any = { block_time: { $lt: lastBlockTime } };  // blockTime 기준 필터링
 
-    const result = await collection
+    const result = collection
         .find(filter)
-        .sort({ block_time: -1 })  // 최신 blockTime 기준 내림차순 정렬
+        .sort({block_time: -1})  // 최신 blockTime 기준 내림차순 정렬
         .limit(pageSize)
         .toArray();
 

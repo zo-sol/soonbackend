@@ -164,7 +164,6 @@ export const getTransactionResult = async (req: Request, res: Response): Promise
     const tailTx = req.params.tailTx;
     try {
         const {result, type, blockTime} = await tp.readTransactionResult(tailTx); // 결과를 기다림
-
         if (blockTime !== 0) {
             const resultReverse = result.reverse();
             let response = "";
