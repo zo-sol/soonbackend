@@ -12,12 +12,15 @@ async function bringInfo(dataTxid: string) {
     let type_field = "";
     let blockTime = 0;
     const txInfo = await readTransaction(dataTxid);
-    console.log("txInfo", txInfo);
-    console.log("offset", txInfo.offset);
-    offset = txInfo.offset;
-    type_field = txInfo.type_field;
-    blockTime = txInfo.blockTime;
-    return {type_field, offset, blockTime};
+    if (txInfo) {
+        offset = txInfo.offset;
+        type_field = txInfo.type_field;
+        blockTime = txInfo.blockTime;
+        return {type_field, offset, blockTime};
+    } else {
+        return null
+    }
+
 }
 
 export const fetchSignaturesForCache = async (address: PublicKey, typeString: string = "SolanaInternet", db_max_block_time: number = 0, limit: number = 100): Promise<{
@@ -36,28 +39,14 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
         for (let i = 0; i < signatures.length; i++) {
             const info = await bringInfo(signatures[i].signature);
             if (info) {
-                if (info.offset) {
-                    if (info.blockTime <= db_max_block_time) {
-                        console.log(`🛑 Encountered blockTime (${info.blockTime}) <= latestBlockTime (${db_max_block_time}). Stopping.`);
-                        return allSignatures; // ✅ 중단하고 결과 리턴
-                    }
 
-                    if (typeString === "SolanaInternet") {
-                        if (info.type_field === "image" || info.type_field === "text") {
-                            if (!allSignatures.includes({
-                                txId: signatures[i].signature,
-                                merkleRoot: info.offset,
-                                blockTime: info.blockTime
-                            })) {
-                                allSignatures.push({
-                                    txId: signatures[i].signature,
-                                    merkleRoot: info.offset,
-                                    blockTime: info.blockTime
-                                });
+                if (info.blockTime <= db_max_block_time) {
+                    console.log(`🛑 Encountered blockTime (${info.blockTime}) <= latestBlockTime (${db_max_block_time}). Stopping.`);
+                    return allSignatures; // ✅ 중단하고 결과 리턴
+                }
 
-                            }
-                        }
-                    } else if (info.type_field === typeString) {
+                if (typeString === "SolanaInternet") {
+                    if (info.type_field === "image" || info.type_field === "text") {
                         if (!allSignatures.includes({
                             txId: signatures[i].signature,
                             merkleRoot: info.offset,
@@ -71,7 +60,21 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
 
                         }
                     }
+                } else if (info.type_field === typeString) {
+                    if (!allSignatures.includes({
+                        txId: signatures[i].signature,
+                        merkleRoot: info.offset,
+                        blockTime: info.blockTime
+                    })) {
+                        allSignatures.push({
+                            txId: signatures[i].signature,
+                            merkleRoot: info.offset,
+                            blockTime: info.blockTime
+                        });
+
+                    }
                 }
+
             }
         }
         before = signatures[signatures.length - 1].signature;
