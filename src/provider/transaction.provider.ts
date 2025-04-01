@@ -12,11 +12,12 @@ async function bringInfo(dataTxid: string) {
     let type_field = "";
     let blockTime = 0;
     const txInfo = await readTransaction(dataTxid);
-    console.log("txinfo in bringinfo",txInfo)
+
     if (txInfo) {
         offset = txInfo.offset;
         type_field = txInfo.type_field;
         blockTime = txInfo.blockTime;
+        console.log("txinfo in bringinfo",type_field,offset,blockTime)
         return {type_field, offset, blockTime};
     } else {
         return null
