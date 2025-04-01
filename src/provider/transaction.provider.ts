@@ -20,12 +20,12 @@ async function bringInfo(dataTxid: string) {
     return {type_field, offset, blockTime};
 }
 
-export const fetchSignaturesForCache = async (address: PublicKey, typeString: string = "SolanaInternet", db_max_block_time:number = 0, limit: number = 100): Promise<{
+export const fetchSignaturesForCache = async (address: PublicKey, typeString: string = "SolanaInternet", db_max_block_time: number = 0, limit: number = 100): Promise<{
     txId: string,
     merkleRoot: string,
     blockTime: number
 }[]> => {
-    let before:any = null
+    let before: any = null
     let allSignatures: { txId: string, merkleRoot: string, blockTime: number }[] = [];
     while (true) {
         const signatures = await connection.getSignaturesForAddress(address, {
@@ -35,14 +35,28 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
         if (signatures.length === 0) break; // 더 이상 가져올 데이터 없음
         for (let i = 0; i < signatures.length; i++) {
             const info = await bringInfo(signatures[i].signature);
+            if (info) {
+                if (info.blockTime <= db_max_block_time) {
+                    console.log(`🛑 Encountered blockTime (${info.blockTime}) <= latestBlockTime (${db_max_block_time}). Stopping.`);
+                    return allSignatures; // ✅ 중단하고 결과 리턴
+                }
 
-            if (info.blockTime <= db_max_block_time) {
-                console.log(`🛑 Encountered blockTime (${info.blockTime}) <= latestBlockTime (${db_max_block_time}). Stopping.`);
-                return allSignatures; // ✅ 중단하고 결과 리턴
-            }
+                if (typeString === "SolanaInternet") {
+                    if (info.type_field === "image" || info.type_field === "text") {
+                        if (!allSignatures.includes({
+                            txId: signatures[i].signature,
+                            merkleRoot: info.offset,
+                            blockTime: info.blockTime
+                        })) {
+                            allSignatures.push({
+                                txId: signatures[i].signature,
+                                merkleRoot: info.offset,
+                                blockTime: info.blockTime
+                            });
 
-            if (typeString === "SolanaInternet") {
-                if (info.type_field === "image"|| info.type_field === "text") {
+                        }
+                    }
+                } else if (info.type_field === typeString) {
                     if (!allSignatures.includes({
                         txId: signatures[i].signature,
                         merkleRoot: info.offset,
@@ -55,21 +69,6 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
                         });
 
                     }
-                }
-            } else if (info.type_field === typeString) {
-                if (!allSignatures.includes({
-                    txId: signatures[i].signature,
-                    merkleRoot: info.offset,
-                    blockTime: info.blockTime
-                })) {
-                    allSignatures.push({
-                        txId: signatures[i].signature,
-                        merkleRoot: info.offset,
-                        blockTime: info.blockTime
-                    });
-
-                } else {
-                    return allSignatures;
                 }
             }
         }
