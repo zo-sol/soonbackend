@@ -24,7 +24,7 @@ export const getTxListFromDb = async (
             version: ServerApiVersion.v1,
             strict: true,
             deprecationErrors: true,
-        }
+        },
     });
 
     let database: any;
@@ -36,7 +36,7 @@ export const getTxListFromDb = async (
     const pageSize = 100;
     let filter: any = { block_time: { $lt: lastBlockTime } };  // blockTime 기준 필터링
 
-    const result = collection
+    const result = await collection
         .find(filter)
         .sort({block_time: -1})  // 최신 blockTime 기준 내림차순 정렬
         .limit(pageSize)
