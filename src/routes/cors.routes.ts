@@ -36,6 +36,9 @@ export default (router: Router): void => {
                     callback(new Error("Not allowed by CORS"));
                 }
             },
+            methods: ['GET', 'POST'],
+            preflightContinue: false,
+            optionsSuccessStatus: 204
         })
     );
 
