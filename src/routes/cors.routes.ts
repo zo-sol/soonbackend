@@ -27,20 +27,25 @@ allowedOrigins.push('http://127.0.0.1:3000');
 
 export default (router: Router): void => {
     const r = Router();
-    r.use(
-        cors({
-            origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-                if (!origin || allowedOrigins.includes(origin)) {
-                    callback(null, true);
-                } else {
-                    callback(new Error("Not allowed by CORS"));
-                }
-            },
-            methods: ['GET', 'POST'],
-            preflightContinue: false,
-            optionsSuccessStatus: 204
-        })
-    );
+    // r.use(
+    //     cors({
+    //         origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    //             if (!origin || allowedOrigins.includes(origin)) {
+    //                 callback(null, true);
+    //             } else {
+    //                 callback(new Error("Not allowed by CORS"));
+    //             }
+    //         },
+    //         methods: ['GET', 'POST'],
+    //         preflightContinue: false,
+    //         optionsSuccessStatus: 204
+    //     })
+    // );
+    r.use(cors({
+        origin: '*',
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+    }));
 
     router.use('/', r);
 }
