@@ -27,16 +27,14 @@ export const getTxListFromDb = async (
         },
     });
 
-    let database: any;
+    await client.close();
     await client.connect();
-    database = client.db("TransactionLists");
     console.log('Connected to MongoDB');
-    const collection = database.collection(`${targetAddress}/${category}`);
-
     const pageSize = 100;
     let filter: any = { block_time: { $lt: lastBlockTime } };  // blockTime 기준 필터링
 
-    const result = await collection
+    const result = await client.db("TransactionLists")
+        .collection(`${targetAddress}/${category}`)
         .find(filter)
         .sort({block_time: -1})  // 최신 blockTime 기준 내림차순 정렬
         .limit(pageSize)
