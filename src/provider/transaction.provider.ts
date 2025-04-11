@@ -10,6 +10,7 @@ const connection = new Connection(configs.network);
 async function bringInfo(dataTxid: string) {
     let offset = "";
     let type_field = "";
+    let handle="";
     let blockTime = 0;
     const txInfo = await readTransaction(dataTxid);
 
@@ -17,20 +18,21 @@ async function bringInfo(dataTxid: string) {
         offset = txInfo.offset;
         type_field = txInfo.type_field;
         blockTime = txInfo.blockTime;
-        return {type_field, offset, blockTime};
+        handle = txInfo.handle;
+        return {type_field, offset, blockTime,handle};
     } else {
         return null
     }
 
 }
-
 export const fetchSignaturesForCache = async (address: PublicKey, typeString: string = "SolanaInternet", db_max_block_time: number = 0, limit: number = 100): Promise<{
     txId: string,
+    handle:string,
     merkleRoot: string,
-    blockTime: number
+    blockTime: number,
 }[]> => {
     let before: any = null
-    let allSignatures: { txId: string, merkleRoot: string, blockTime: number }[] = [];
+    let allSignatures: { txId: string, handle:string,merkleRoot: string, blockTime: number }[] = [];
     while (true) {
         const signatures = await connection.getSignaturesForAddress(address, {
             before: before,
@@ -51,11 +53,13 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
                     if (info.type_field === "image" || info.type_field === "test_image" ||info.type_field === "text") {
                         if (!allSignatures.includes({
                             txId: signatures[i].signature,
+                            handle:info.handle,
                             merkleRoot: info.offset,
                             blockTime: info.blockTime
                         })) {
                             allSignatures.push({
                                 txId: signatures[i].signature,
+                                handle:info.handle,
                                 merkleRoot: info.offset,
                                 blockTime: info.blockTime
                             });
@@ -65,11 +69,13 @@ export const fetchSignaturesForCache = async (address: PublicKey, typeString: st
                 } else if (info.type_field === typeString) {
                     if (!allSignatures.includes({
                         txId: signatures[i].signature,
+                        handle:info.handle,
                         merkleRoot: info.offset,
                         blockTime: info.blockTime
                     })) {
                         allSignatures.push({
                             txId: signatures[i].signature,
+                            handle:info.handle,
                             merkleRoot: info.offset,
                             blockTime: info.blockTime
                         });
@@ -101,6 +107,7 @@ export const readTransaction = async (transaction: string): Promise<any> => {
                 if (args) {
                     argData = args.data;
                     argData.blockTime = tx.blockTime;
+
                 }
             }
         } else {
@@ -112,6 +119,7 @@ export const readTransaction = async (transaction: string): Promise<any> => {
 
     return argData; // 결과 반환
 }
+
 export const readTransactionResult = async (transaction: string): Promise<any> => {
     let result: any[] = []; // 결과를 저장할 배열
     let lastArgs: any = undefined; // 결과를 저장할 배열

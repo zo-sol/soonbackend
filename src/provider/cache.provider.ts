@@ -9,6 +9,7 @@ import * as timers from "node:timers";
 
 interface TxDocument {
     _id: string, // ✅ _id를 string으로 설정
+    handle:string,
     merkle_root: string,
     block_time:number
 }
@@ -89,7 +90,7 @@ export const updateTxListToDb = async (
             console.log(sig.txId)
             await collection.updateOne(
                 {_id: sig.txId}, // 검색 조건
-                {$set: {merkle_root: sig.merkleRoot, block_time: sig.blockTime}},
+                {$set: {merkle_root: sig.merkleRoot, handle:sig.handle, block_time: sig.blockTime}},
                 {upsert: true}
             );
         }
