@@ -99,14 +99,15 @@ export const getCache = async (req: Request, res: Response): Promise<void> => {
 
 export const getCachedTxList = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {targetAddress, category, lastBlock = 99999999999, mongoUrl = configs.mongoUri} = req.query;
+        const {networkType,targetAddress, category, lastBlock = 99999999999, mongoUrl = configs.mongoUri} = req.query;
+        const _networkType = String(networkType);
 
         const _targetAddress = String(targetAddress);
         const _category = String(category);
         const _lastBlock = Number(lastBlock);
         const _mongoUrl = String(mongoUrl);
 
-        const response = await cp.getTxListFromDb(_targetAddress, _category, _lastBlock, _mongoUrl); // 결과를 기다림
+        const response = await cp.getTxListFromDb(_networkType,_targetAddress, _category, _lastBlock, _mongoUrl); // 결과를 기다림
         res.send(response);
     } catch (error) {
         if (error instanceof Error) {
@@ -120,12 +121,13 @@ export const getCachedTxList = async (req: Request, res: Response): Promise<void
 
 export const updateCachedTxList = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {targetAddress, category, mongoUrl = configs.mongoUri} = req.body;
+        const {networkType,targetAddress, category, mongoUrl = configs.mongoUri} = req.body;
+        const _networkType = String(networkType);
         const _targetAddress = String(targetAddress);
         const _category = String(category);
         const _mongoUrl = String(mongoUrl);
 
-        const response = await cp.updateTxListToDb(_targetAddress, _category, _mongoUrl); // 결과를 기다림
+        const response = await cp.updateTxListToDb(_networkType,_targetAddress, _category, _mongoUrl); // 결과를 기다림
         res.send(response);
     } catch (error) {
         if (error instanceof Error) {

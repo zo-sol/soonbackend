@@ -15,6 +15,7 @@ interface TxDocument {
 }
 
 export const getTxListFromDb = async (
+    networkType:string,
     targetAddress: string,
     category: string,
     lastBlockTime: number = 999999999999,  // 기본적으로 가장 최신부터 시작
@@ -37,7 +38,7 @@ export const getTxListFromDb = async (
         let filter: any = {block_time: {$lt: lastBlockTime}};  // blockTime 기준 필터링
 
         return await client.db("TransactionLists")
-            .collection(`${targetAddress}/${category}`)
+            .collection(`${networkType}/${targetAddress}/${category}`)
             .find(filter)
             .sort({block_time: -1})  // 최신 blockTime 기준 내림차순 정렬
             .limit(pageSize)
@@ -57,6 +58,7 @@ function sleep(ms: number): Promise<void> {
 let isUpdating = false;
 
 export const updateTxListToDb = async (
+    networkType:string,
     targetAddress: string,
     category: string,
     _mongoUrl: string = configs.mongoUri
@@ -81,7 +83,7 @@ export const updateTxListToDb = async (
     try {
         await client.connect(); // ✅ MongoDB 연결을 기다려야 함
         const database = client.db("TransactionLists");
-        const collection = database.collection<TxDocument>(`${targetAddress}/${category}`);
+        const collection = database.collection<TxDocument>(`${networkType}/${targetAddress}/${category}`);
         const _targetAddress = new PublicKey(targetAddress);
         const new_sig = await fetchSignaturesForCache(_targetAddress, category);
         console.log(new_sig)
