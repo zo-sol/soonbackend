@@ -1,51 +1,40 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import cors from 'cors';
 
-// export default (router: Router): void => {
-//     const r = Router();
-//     r.use(cors({
-//         origin: '*', // 모든 origin 허용
-//     }));
-//
-//     router.use('/', r);
-// }
-
-//
 const allowedOrigins = [
     "https://iq6900.com",
     "https://elizacodein.com",
     "https://eliza-codein.pages.dev",
-    "https://testbrowserforiq.web.app"
-
-
+    "https://testbrowserforiq.web.app",
+    "https://soon-iq-frontend.pages.dev",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
 ];
-allowedOrigins.push('http://localhost:3000');
-allowedOrigins.push('http://127.0.0.1:3000');
-//     const allowedOrigins = [
-//         "*"
-//     ];
+
+// CORS 옵션 명시
+const corsOptions = {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true, // 브라우저 credentials 포함 요청 지원
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+    optionsSuccessStatus: 204
+};
 
 export default (router: Router): void => {
     const r = Router();
-    // r.use(
-    //     cors({
-    //         origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    //             if (!origin || allowedOrigins.includes(origin)) {
-    //                 callback(null, true);
-    //             } else {
-    //                 callback(new Error("Not allowed by CORS"));
-    //             }
-    //         },
-    //         methods: ['GET', 'POST'],
-    //         preflightContinue: false,
-    //         optionsSuccessStatus: 204
-    //     })
-    // );
-    r.use(cors({
-        origin: '*',
-        methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
-    }));
 
+    // 프리플라이트 요청 처리
+    r.options('*', cors(corsOptions));
+
+    // CORS 미들웨어 전체 라우터에 적용
+    r.use(cors(corsOptions));
+
+    // 이후 실제 API 등록
     router.use('/', r);
-}
+};
