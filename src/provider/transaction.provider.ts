@@ -5,7 +5,7 @@ import idl from '../../idl.json';
 import {getDBPDA, getPDA} from "./pda.provider";
 
 const amountToSend = 0.003 * web3.LAMPORTS_PER_SOL;
-const connection = new Connection(configs.network);
+const connection = new Connection(configs?.network!);
 
 async function bringInfo(dataTxid: string) {
     let offset = "";

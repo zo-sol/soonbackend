@@ -10,6 +10,6 @@ export const configs = {
 
 export const constants = {
     expectedReceiver: new PublicKey("8t7MxB6WaYCMmo9xDd2Dq22rchLxZMagWQMC7YpeYfKp"),
-    programId: new PublicKey("3zupncdFe5CDG1bnVFbbKbMC8zr8j1VoyyBcWQwoA2dc") //testnet
+    programId: new PublicKey("3zupncdFe5CDG1bnVFbbKbMC8zr8j1VoyyBcWQwoA2dc")
 
 }
