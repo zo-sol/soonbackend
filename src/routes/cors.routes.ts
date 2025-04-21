@@ -7,8 +7,8 @@ const allowedOrigins = [
     "https://eliza-codein.pages.dev",
     "https://testbrowserforiq.web.app",
     "https://soon-iq-frontend.pages.dev",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "https://bnb.iq6900.com",
+    "https://soon.iq6900.com",
 ];
 
 // CORS 옵션 명시
