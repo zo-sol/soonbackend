@@ -82,10 +82,11 @@ export const getTransactionInfo = async (req: Request, res: Response): Promise<v
 
 export const putCache = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {chunks, merkleRoot} = req.query;
-            const _merkleRoot = String(merkleRoot);
-            const response = await cp.putChunks(chunks, _merkleRoot); // 결과를 기다림
-            res.send(response);
+        const {dataStr, merkleRoot} = req.query;
+        const _merkleRoot = String(merkleRoot);
+        const _dataStr = String(dataStr);
+        const response = await cp.putChunks(_dataStr, _merkleRoot); // 결과를 기다림
+        res.send(response);
 
     } catch (error) {
         if (error instanceof Error) {

@@ -181,7 +181,6 @@ export const getTransactionInfoFromCacheDb = async (transactionId: string, merkl
                     chunks = getDecodedChunks(resultReverse, blockTime);
                 }
 
-                //else if (type == "text" || type == "json" ||type == "love_letter") {
                 else {
                     chunks = getChunks(resultReverse);
                 }
@@ -189,7 +188,6 @@ export const getTransactionInfoFromCacheDb = async (transactionId: string, merkl
                 const calculatedMerkleRoot = generateMerkleRoot(chunks);
                 console.log("calculatedMerkleRoot", calculatedMerkleRoot);
                 console.log("merkleRoot", merkleRoot)
-
                 if (calculatedMerkleRoot === merkleRoot) {
                     const asciiString = chunks.join('')
                     await saveDataToDb(merkleRoot, asciiString, _mongoUrl);
@@ -208,7 +206,8 @@ export const getTransactionInfoFromCacheDb = async (transactionId: string, merkl
     }
 }
 
-export const putChunks = async (chunks: any, merkleRoot:string, _mongoUrl: string = configs.mongoUri) => {
+export const putChunks = async (dataStr: string, merkleRoot:string, _mongoUrl: string = configs.mongoUri) => {
+    let chunks = getChunks(dataStr);
     const calculatedMerkleRoot = generateMerkleRoot(chunks);
     console.log("calculatedMerkleRoot", calculatedMerkleRoot);
     if (calculatedMerkleRoot === merkleRoot) {
