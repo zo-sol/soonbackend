@@ -206,8 +206,8 @@ export const getTransactionInfoFromCacheDb = async (transactionId: string, merkl
     }
 }
 
-export const putChunks = async (dataStr: string, merkleRoot:string, _mongoUrl: string = configs.mongoUri) => {
-    let chunks = getChunks(dataStr);
+export const putChunks = async (chunks: string[], merkleRoot:string, _mongoUrl: string = configs.mongoUri) => {
+    // let chunks = getChunks(dataStr);
     const calculatedMerkleRoot = generateMerkleRoot(chunks);
     console.log("calculatedMerkleRoot", calculatedMerkleRoot);
     if (calculatedMerkleRoot === merkleRoot) {

@@ -82,12 +82,12 @@ export const getTransactionInfo = async (req: Request, res: Response): Promise<v
 
 export const putCache = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { dataStr, merkleRoot } = req.body;
+        const { chunks, merkleRoot } = req.body;
 
-        if (!dataStr || !merkleRoot) {
+        if (!chunks || !merkleRoot) {
             res.status(500);
         }
-        const response = await cp.putChunks(dataStr, merkleRoot);
+        const response = await cp.putChunks(chunks, merkleRoot);
         res.send(response);
     } catch (error) {
         console.error(error);
