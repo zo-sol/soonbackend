@@ -82,21 +82,18 @@ export const getTransactionInfo = async (req: Request, res: Response): Promise<v
 
 export const putCache = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {dataStr, merkleRoot} = req.query;
-        const _merkleRoot = String(merkleRoot);
-        const _dataStr = String(dataStr);
-        const response = await cp.putChunks(_dataStr, _merkleRoot); // 결과를 기다림
-        res.send(response);
+        const { dataStr, merkleRoot } = req.body;
 
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error(error);
-            res.status(500).json({error: error.message}); // 에러 응답
-        } else {
-            res.status(500).json({error: "Failed to get transaction info"}); // 에러 응답
+        if (!dataStr || !merkleRoot) {
+            res.status(500);
         }
+        const response = await cp.putChunks(dataStr, merkleRoot);
+        res.send(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error instanceof Error ? error.message : "Server error" });
     }
-}
+};
 
 export const getCache = async (req: Request, res: Response): Promise<void> => {
     try {
