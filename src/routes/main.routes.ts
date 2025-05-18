@@ -6,7 +6,6 @@ export default (router: Router): void => {
     r.get('/api/health', controller.getHealth);
     r.get('/getPDA/:userKey', controller.getPDAByUserId);
     r.get('/getCache', controller.getCache);
-    r.get('/putCache', controller.putCache);
 
     r.get('/getTxList', controller.getCachedTxList);
 
@@ -19,6 +18,7 @@ export default (router: Router): void => {
     r.get('/get_transaction_result/:tailTx', controller.getTransactionResult);
     r.get('/get_ascii_chunks/:imageUrl', controller.getAsciiChunks);
 
+    r.post('/putCache', controller.putCache);
     r.post('/update-tx-list', controller.updateCachedTxList);
     r.post('/create-send-transaction', controller.createTransaction);
     r.post('/create-db-code-transaction', controller.createDBTransaction);
