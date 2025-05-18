@@ -13,7 +13,7 @@ export default (router: Router): void => {
     r.get('/getDBPDA/:userKey', controller.getDBPDAByUserId);
     r.get('/initialize-user/:userKey', controller.initializeUser);
     r.get('/get_transaction_info/:txId', controller.getTransactionInfo);
-    r.get('/get_transaction_result/:transaction', controller.getTransactionChunks);
+    r.get('/get_transaction_chunks/:transaction', controller.getTransactionChunks);
 
     r.get('/get_transaction_result/:tailTx', controller.getTransactionResult);
     r.get('/get_ascii_chunks/:imageUrl', controller.getAsciiChunks);
