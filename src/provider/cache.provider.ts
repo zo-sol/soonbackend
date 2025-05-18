@@ -9,13 +9,13 @@ import * as timers from "node:timers";
 
 interface TxDocument {
     _id: string, // ✅ _id를 string으로 설정
-    handle:string,
+    handle: string,
     merkle_root: string,
-    block_time:number
+    block_time: number
 }
 
 export const getTxListFromDb = async (
-    networkType:string,
+    networkType: string,
     targetAddress: string,
     category: string,
     lastBlockTime: number = 999999999999,  // 기본적으로 가장 최신부터 시작
@@ -52,13 +52,15 @@ export const getTxListFromDb = async (
     }
 
 };
+
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
 let isUpdating = false;
 
 export const updateTxListToDb = async (
-    networkType:string,
+    networkType: string,
     targetAddress: string,
     category: string,
     _mongoUrl: string = configs.mongoUri
@@ -92,7 +94,7 @@ export const updateTxListToDb = async (
             console.log(sig.txId)
             await collection.updateOne(
                 {_id: sig.txId}, // 검색 조건
-                {$set: {merkle_root: sig.merkleRoot, handle:sig.handle, block_time: sig.blockTime}},
+                {$set: {merkle_root: sig.merkleRoot, handle: sig.handle, block_time: sig.blockTime}},
                 {upsert: true}
             );
         }
@@ -175,12 +177,12 @@ export const getTransactionInfoFromCacheDb = async (transactionId: string, merkl
             if (type !== '') {
                 const resultReverse = result.reverse();
                 let chunks: string[] = [];
-                if (type == "image"|| type == "test_image") {
+                if (type == "image" || type == "test_image") {
                     chunks = getDecodedChunks(resultReverse, blockTime);
                 }
 
                 //else if (type == "text" || type == "json" ||type == "love_letter") {
-                else{
+                else {
                     chunks = getChunks(resultReverse);
                 }
 
@@ -206,5 +208,15 @@ export const getTransactionInfoFromCacheDb = async (transactionId: string, merkl
     }
 }
 
-
+export const putChunks = async (chunks: any, merkleRoot:string, _mongoUrl: string = configs.mongoUri) => {
+    const calculatedMerkleRoot = generateMerkleRoot(chunks);
+    console.log("calculatedMerkleRoot", calculatedMerkleRoot);
+    if (calculatedMerkleRoot === merkleRoot) {
+        const asciiString = chunks.join('')
+        await saveDataToDb(merkleRoot, asciiString, _mongoUrl);
+        return "success";
+    } else {
+        return ('Merkle root mismatch')
+    }
+}
 

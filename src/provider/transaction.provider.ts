@@ -119,6 +119,43 @@ export const readTransaction = async (transaction: string): Promise<any> => {
 
     return argData; // 결과 반환
 }
+export const readTransactionAsChunk = async (transaction: string,chunkCount:number): Promise<any> => {
+    let result: any[] = []; // 결과를 저장할 배열
+    let lastArgs: any = undefined; // 결과를 저장할 배열
+    let type: string = "";
+    let blockTime = 0;
+    let i = 0;
+    try {
+        do {
+            const tx = await connection.getTransaction(transaction);
+            if (tx) {
+                const instructions = tx.transaction.message.instructions;
+                for (const instruction of instructions) {
+                    const coder = new BorshInstructionCoder(idl as Idl);
+                    const args = coder.decode(instruction.data, "base58");
+                    if (args) {
+                        lastArgs = args.data;
+                        if (lastArgs["tail_tx"] !== undefined && type === "") {
+                            type = lastArgs["type_field"];
+                        } else {
+                            result.push(lastArgs);
+                        }
+                    }
+                }
+                if (tx.blockTime) {
+                    blockTime = tx.blockTime;
+                }
+            } else {
+                return {result, type, blockTime}; // 결과 반환
+            }
+            transaction = lastArgs["tail_tx"] === undefined ? lastArgs["before_tx"] : lastArgs["tail_tx"];
+            i++;
+        } while (i<chunkCount && lastArgs["before_tx"] !== 'Genesis');
+    } catch (err) {
+        console.error("Error fetching transaction:", err);
+    }
+    return {result, transaction, type, blockTime}; // 결과 반환
+}
 
 export const readTransactionResult = async (transaction: string): Promise<any> => {
     let result: any[] = []; // 결과를 저장할 배열
@@ -128,7 +165,6 @@ export const readTransactionResult = async (transaction: string): Promise<any> =
     try {
         // 트랜잭션 가져오기
         do {
-            let startTime = performance.now();
             const tx = await connection.getTransaction(transaction);
             if (tx) {
                 const instructions = tx.transaction.message.instructions;
@@ -153,8 +189,6 @@ export const readTransactionResult = async (transaction: string): Promise<any> =
             }
             transaction = lastArgs["tail_tx"] === undefined ? lastArgs["before_tx"] : lastArgs["tail_tx"];
             let endTime = performance.now();
-            let executionTime = endTime - startTime;
-            console.log(`실행 시간: ${executionTime.toFixed(2)}ms`);
         } while (lastArgs["before_tx"] !== null && lastArgs["before_tx"] !== 'Genesis');
     } catch (err) {
         console.error("Error fetching transaction:", err);

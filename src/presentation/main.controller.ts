@@ -5,7 +5,7 @@ import * as mp from "../provider/main.provider";
 import * as pp from "../provider/pda.provider";
 import * as cp from "../provider/cache.provider";
 
-import {decodeByChunks,makeAsciiChunks} from "../provider/compress.provider";
+import {decodeByChunks, makeAsciiChunks} from "../provider/compress.provider";
 
 import {configs} from "../configs";
 
@@ -79,9 +79,27 @@ export const getTransactionInfo = async (req: Request, res: Response): Promise<v
  * txId,merkleRoot
  * 트랜잭션 정보 가져오기
  */
+
+export const putCache = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const {chunks, merkleRoot} = req.query;
+            const _merkleRoot = String(merkleRoot);
+            const response = await cp.putChunks(chunks, _merkleRoot); // 결과를 기다림
+            res.send(response);
+
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error);
+            res.status(500).json({error: error.message}); // 에러 응답
+        } else {
+            res.status(500).json({error: "Failed to get transaction info"}); // 에러 응답
+        }
+    }
+}
+
 export const getCache = async (req: Request, res: Response): Promise<void> => {
     try {
-        res.setTimeout(3600_000); // 1시간
+
         const {txId, merkleRoot} = req.query;  // query에서 받기
         const _txId = String(txId);
         const _merkleRoot = String(merkleRoot);
@@ -100,7 +118,7 @@ export const getCache = async (req: Request, res: Response): Promise<void> => {
 
 export const getCachedTxList = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {networkType,targetAddress, category, lastBlock = 99999999999, mongoUrl = configs.mongoUri} = req.query;
+        const {networkType, targetAddress, category, lastBlock = 99999999999, mongoUrl = configs.mongoUri} = req.query;
         const _networkType = String(networkType);
 
         const _targetAddress = String(targetAddress);
@@ -108,7 +126,7 @@ export const getCachedTxList = async (req: Request, res: Response): Promise<void
         const _lastBlock = Number(lastBlock);
         const _mongoUrl = String(mongoUrl);
 
-        const response = await cp.getTxListFromDb(_networkType,_targetAddress, _category, _lastBlock, _mongoUrl); // 결과를 기다림
+        const response = await cp.getTxListFromDb(_networkType, _targetAddress, _category, _lastBlock, _mongoUrl); // 결과를 기다림
         res.send(response);
     } catch (error) {
         if (error instanceof Error) {
@@ -122,13 +140,13 @@ export const getCachedTxList = async (req: Request, res: Response): Promise<void
 
 export const updateCachedTxList = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {networkType,targetAddress, category, mongoUrl = configs.mongoUri} = req.body;
+        const {networkType, targetAddress, category, mongoUrl = configs.mongoUri} = req.body;
         const _networkType = String(networkType);
         const _targetAddress = String(targetAddress);
         const _category = String(category);
         const _mongoUrl = String(mongoUrl);
 
-        const response = await cp.updateTxListToDb(_networkType,_targetAddress, _category, _mongoUrl); // 결과를 기다림
+        const response = await cp.updateTxListToDb(_networkType, _targetAddress, _category, _mongoUrl); // 결과를 기다림
         res.send(response);
     } catch (error) {
         if (error instanceof Error) {
@@ -186,6 +204,37 @@ export const getTransactionResult = async (req: Request, res: Response): Promise
             res.send('404 Not Found');
         }
 
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error);
+            res.status(500).json({error: error.message}); // 에러 응답
+        } else {
+            res.status(500).json({error: "Failed to get transaction info"}); // 에러 응답
+        }
+    }
+}
+
+export const getTransactionChunks = async (req: Request, res: Response): Promise<void> => {
+    const _transaction = req.params.transaction;
+    try {
+        const {result, transaction, type, blockTime} = await tp.readTransactionAsChunk(_transaction, 100); // 결과를 기다림
+        if (blockTime !== 0) {
+            const resultReverse = result.reverse();
+            let response: { resultStr: string, beforeTx: string } = {resultStr: "", beforeTx: ""};
+
+
+            let resultText: string = "";
+            for (const chunk of resultReverse) {
+                if (chunk.code) {
+                    resultText += chunk.code;
+                }
+            }
+            response.resultStr = resultText;
+            response.beforeTx = transaction;
+            res.send(response);
+        } else {
+            res.send('404 Not Found');
+        }
     } catch (error) {
         if (error instanceof Error) {
             console.error(error);
@@ -305,11 +354,10 @@ export const generateMerkleRoot = async (req: Request, res: Response): Promise<a
 
 }
 
-export const getHealth = async(req: Request, resp: Response): Promise<any> => {
+export const getHealth = async (req: Request, resp: Response): Promise<any> => {
     try {
         resp.status(200).json({data: 'hello from IQ6900'});
-    }
-    catch (err) {
+    } catch (err) {
         console.log(`getHealth() ERROR: ${err}`);
         throw err;
     }
