@@ -81,6 +81,7 @@ export const getTransactionInfo = async (req: Request, res: Response): Promise<v
  */
 export const getCache = async (req: Request, res: Response): Promise<void> => {
     try {
+        res.setTimeout(3600_000); // 1시간
         const {txId, merkleRoot} = req.query;  // query에서 받기
         const _txId = String(txId);
         const _merkleRoot = String(merkleRoot);
